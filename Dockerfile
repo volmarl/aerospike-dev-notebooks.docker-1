@@ -50,7 +50,7 @@ RUN usermod -a -G aerospike ${NB_USER}
 # Add the Aerospike configuration specific to this dockerfile
 COPY aerospike.template.conf /etc/aerospike/aerospike.template.conf
 COPY aerospike.conf /etc/aerospike/aerospike.conf
-
+COPY entrypoint.sh /opt/aerospike/bin/entrypoint.sh
 RUN chown -R ${NB_UID} /etc/aerospike
 RUN chown -R ${NB_UID} /opt/aerospike
 RUN chown -R ${NB_UID} /var/log/aerospike
@@ -75,6 +75,6 @@ RUN  fix-permissions /home/${NB_USER}/
 # rather than overiding
 COPY entrypoint.sh /usr/local/bin/start-notebook.sh
 WORKDIR /home/${NB_USER}/notebooks  
-CMD ["/usr/local/bin/start-notebook.sh"]
 
 USER ${NB_USER}
+CMD ["/opt/aerospike/bin/entrypoint.sh"]
