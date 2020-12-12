@@ -55,6 +55,7 @@ RUN chown -R ${NB_UID} /etc/aerospike
 RUN chown -R ${NB_UID} /opt/aerospike
 RUN chown -R ${NB_UID} /var/log/aerospike
 RUN chown -R ${NB_UID} /var/run/aerospike
+RUN chown -R ${NB_UID} /etc/init.d/
 
 #RUN fix-permissions /etc/aerospike/
 #RUN fix-permissions /var/log/aerospike
