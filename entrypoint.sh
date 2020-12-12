@@ -46,7 +46,7 @@ done
 echo "link $NETLINK state $(cat /sys/class/net/${NETLINK}/operstate) in ${NETLINK_COUNT}"
 
 #service aerospike restart
-/etc/init.d/aerospike start 2>> /var/log/aerospike/start-up.log
+/etc/init.d/aerospike start 2>&1 >> /var/log/aerospike/start-up.log
 
 #####
 # Jupiter stuff
