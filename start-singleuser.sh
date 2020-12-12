@@ -39,7 +39,7 @@ echo "starting aerospike"
 echo $?
 
 
-# Juyter api single user area:
+# Jupyter api single user area:
 
 # set default ip to 0.0.0.0
 if [[ "$NOTEBOOK_ARGS $@" != *"--ip="* ]]; then
@@ -73,4 +73,17 @@ if [ ! -z "$JPY_HUB_API_URL" ]; then
 fi
 NOTEBOOK_BIN="jupyterhub-singleuser"
 
-. /usr/local/bin/start.sh $NOTEBOOK_BIN $NOTEBOOK_ARGS "$@"
+wrapper=""
+if [[ "${RESTARTABLE}" == "yes" ]]; then
+  wrapper="run-one-constantly"
+fi
+
+if [[ ! -z "${JUPYTERHUB_API_TOKEN}" ]]; then
+  # launched by JupyterHub, use single-user entrypoint
+. /usr/local/bin/start.sh $NOTEBOOK_BIN $NOTEBOOK_ARGS "$@" 
+elif [[ ! -z "${JUPYTER_ENABLE_LAB}" ]]; then
+  . /usr/local/bin/start.sh $wrapper jupyter lab "$@"
+else
+  . /usr/local/bin/start.sh $wrapper jupyter notebook "$@"
+fi
+
