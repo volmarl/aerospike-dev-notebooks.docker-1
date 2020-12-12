@@ -45,7 +45,8 @@ while [ $NETLINK_UP -eq 0 ] && [ $NETLINK_COUNT -lt 20 ]; do
 done
 echo "link $NETLINK state $(cat /sys/class/net/${NETLINK}/operstate) in ${NETLINK_COUNT}"
 
-service aerospike restart
+#service aerospike restart
+/etc/init.d/aerospike start 2>> /var/log/aerospike/start-up.log
 
 #####
 # Jupiter stuff
