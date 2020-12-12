@@ -19,7 +19,8 @@ ENV NB_UID ${NB_UID}
 ENV HOME /home/${NB_USER}
 USER root
 RUN chown -R ${NB_UID} ${HOME}
-
+COPY entrypoint.sh /usr/local/bin/start-notebook.sh
+COPY start-singleuser.sh /usr/local/bin/start-singleuser.sh
 
 RUN  mkdir /var/run/aerospike\
   && apt-get update -y \
@@ -55,7 +56,8 @@ RUN chown -R ${NB_UID} /etc/aerospike
 RUN chown -R ${NB_UID} /opt/aerospike
 RUN chown -R ${NB_UID} /var/log/aerospike
 RUN chown -R ${NB_UID} /var/run/aerospike
-RUN chown -R ${NB_UID} /etc/init.d/
+RUN chown -R ${NB_UID} /etc/init.d
+RUN chown -R ${NB_UID} /usr/local/bin
 
 #RUN fix-permissions /etc/aerospike/
 #RUN fix-permissions /var/log/aerospike
@@ -71,10 +73,7 @@ RUN echo -e "Aerospike Java Client 5.0.0" >> /home/${NB_USER}/notebooks/README.m
 COPY jupyter_notebook_config.py /home/${NB_USER}/
 RUN  fix-permissions /home/${NB_USER}/
 
-# I don't know why this has to be like this 
-# rather than overiding
-COPY entrypoint.sh /usr/local/bin/start-notebook.sh
-COPY start-singleuser.sh /usr/local/bin/start-singleuser.sh
 WORKDIR /home/${NB_USER}/notebooks  
 
 USER ${NB_USER}
+CMD ["/usr/local/bin/start-notebook.sh"]
