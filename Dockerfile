@@ -21,6 +21,7 @@ USER root
 RUN chown -R ${NB_UID} ${HOME}
 COPY entrypoint.sh /usr/local/bin/start-notebook.sh
 COPY start-singleuser.sh /usr/local/bin/start-singleuser.sh
+RUN chmod +x /usr/local/bin/start-singleuser.sh
 
 RUN  mkdir /var/run/aerospike\
   && apt-get update -y \
@@ -72,8 +73,11 @@ RUN echo -e "Aerospike Java Client 5.0.0" >> /home/${NB_USER}/notebooks/README.m
 
 #COPY jupyter_notebook_config.py /home/${NB_USER}/
 RUN  fix-permissions /home/${NB_USER}/
+RUN fix-permissions /etc/aerospike/
+RUN fix-permissions /var/log/aerospike/
+RUN fix-permissions /usr/local/bin/
 
 WORKDIR /home/${NB_USER}/notebooks  
-
+#CMD ["/usr/local/bin/start-singleuser.sh"]
 USER ${NB_USER}
 CMD ["/usr/local/bin/start-notebook.sh"]
