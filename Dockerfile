@@ -70,7 +70,7 @@ RUN asd --version >> /home/${NB_USER}/notebooks/README.md
 RUN echo -e "Aerospike Python Client `pip show aerospike|grep Version|sed -e 's/Version://g'`" >> /home/${NB_USER}/notebooks/README.md
 RUN echo -e "Aerospike Java Client 5.0.0" >> /home/${NB_USER}/notebooks/README.md
 
-COPY jupyter_notebook_config.py /home/${NB_USER}/
+#COPY jupyter_notebook_config.py /home/${NB_USER}/
 RUN  fix-permissions /home/${NB_USER}/
 
 WORKDIR /home/${NB_USER}/notebooks  
