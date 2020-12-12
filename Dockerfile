@@ -77,4 +77,9 @@ COPY entrypoint.sh /usr/local/bin/start-notebook.sh
 WORKDIR /home/${NB_USER}/notebooks  
 
 USER ${NB_USER}
-ENTRYPOINT ["/opt/aerospike/bin/entrypoint.sh"]
+#CMD ["/opt/aerospike/bin/entrypoint.sh"]
+
+ENTRYPOINT ["/usr/bin/env"]
+
+CMD ["/opt/aerospike/bin/entrypoint.sh"]
+

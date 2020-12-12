@@ -30,9 +30,9 @@ if [ -f /etc/aerospike/aerospike.template.conf ]; then
 fi
 
 echo "starting aerospike"
-service aerospike restart
+#service aerospike restart
+/etc/init.d/aerospike restart 2>&1 >> /var/log/aerospike/start-up.log
 echo $?
-#/etc/init.d/aerospike start 2>&1 >> /var/log/aerospike/start-up.log
 
 #####
 # Jupiter stuff
