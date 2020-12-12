@@ -75,4 +75,7 @@ RUN  fix-permissions /home/${NB_USER}/
 # rather than overiding
 COPY entrypoint.sh /usr/local/bin/start-notebook.sh
 WORKDIR /home/${NB_USER}/notebooks  
+ENTRYPOINT ["tini", "-g", "--"]
+CMD ["start-notebook.sh"]
+
 USER ${NB_USER}
