@@ -74,12 +74,7 @@ RUN  fix-permissions /home/${NB_USER}/
 # I don't know why this has to be like this 
 # rather than overiding
 COPY entrypoint.sh /usr/local/bin/start-notebook.sh
+COPY start-singleuser.sh /usr/local/bin/start-singleuser.sh
 WORKDIR /home/${NB_USER}/notebooks  
 
 USER ${NB_USER}
-#CMD ["/opt/aerospike/bin/entrypoint.sh"]
-
-ENTRYPOINT ["/usr/bin/env"]
-
-CMD ["/opt/aerospike/bin/entrypoint.sh"]
-
