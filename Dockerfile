@@ -78,6 +78,6 @@ RUN fix-permissions /var/log/aerospike/
 RUN fix-permissions /usr/local/bin/
 
 WORKDIR /home/${NB_USER}/notebooks  
-#CMD ["/usr/local/bin/start-singleuser.sh"]
-USER ${NB_USER}
 CMD ["/usr/local/bin/start-singleuser.sh"]
+USER ${NB_USER}
+#CMD ["/usr/local/bin/start-singleuser.sh"]
