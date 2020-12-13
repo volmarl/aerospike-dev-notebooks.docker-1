@@ -1,5 +1,5 @@
 #!/bin/bash
-set -m
+set -e
 
 export CORES=$(grep -c ^processor /proc/cpuinfo)
 export SERVICE_THREADS=${SERVICE_THREADS:-$CORES}
@@ -30,9 +30,9 @@ if [ -f /etc/aerospike/aerospike.template.conf ]; then
 fi
 
 echo "starting aerospike"
-#service aerospike restart
-/etc/init.d/aerospike restart 2>&1 >> /var/log/aerospike/start-up.log
-echo $?
+service aerospike restart
+#/etc/init.d/aerospike restart 2>&1 >> /var/log/aerospike/start-up.log
+#echo $?
 
 #####
 # Jupiter stuff
