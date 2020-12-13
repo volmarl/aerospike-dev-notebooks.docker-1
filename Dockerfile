@@ -22,7 +22,7 @@ RUN chown -R ${NB_UID} ${HOME}
 COPY entrypoint.sh /usr/local/bin/start-notebook.sh
 COPY start-singleuser.sh /usr/local/bin/start-singleuser.sh
 COPY aerospike-run.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/start-singleuser.sh
+COPY aerospike-start.sh /usr/local/bin/start-notebook.d/
 
 RUN  mkdir /var/run/aerospike\
   && apt-get update -y \
@@ -45,39 +45,37 @@ RUN  mkdir /var/run/aerospike\
   && rm -rf /opt/aerospike/lib/java \
   && apt-get purge -y \
   && apt autoremove -y \
-  && mkdir -p /var/log/aerospike 
+  && mkdir -p /var/log/aerospike \
+  && usermod -a -G aerospike ${NB_USER}
 
 COPY aerospike /etc/init.d/
-RUN usermod -a -G aerospike ${NB_USER}
 
 # Add the Aerospike configuration specific to this dockerfile
 COPY aerospike.template.conf /etc/aerospike/aerospike.template.conf
 COPY aerospike.conf /etc/aerospike/aerospike.conf
 COPY entrypoint.sh /opt/aerospike/bin/entrypoint.sh
-RUN chown -R ${NB_UID} /etc/aerospike
-RUN chown -R ${NB_UID} /opt/aerospike
-RUN chown -R ${NB_UID} /var/log/aerospike
-RUN chown -R ${NB_UID} /var/run/aerospike
-RUN chown -R ${NB_UID} /etc/init.d
-RUN chown -R ${NB_UID} /usr/local/bin
+RUN chown -R ${NB_UID} /etc/aerospike \
+  && chown -R ${NB_UID} /opt/aerospike \
+  && chown -R ${NB_UID} /var/log/aerospike \
+  && chown -R ${NB_UID} /var/run/aerospike \
+  && chown -R ${NB_UID} /etc/init.d \
+  && chown -R ${NB_UID} /usr/local/bin
 
-#RUN fix-permissions /etc/aerospike/
-#RUN fix-permissions /var/log/aerospike
 
 COPY notebooks* /home/${NB_USER}/notebooks
-RUN echo "Versions:" > /home/${NB_USER}/notebooks/README.md
-RUN python -V >> /home/${NB_USER}/notebooks/README.md
-RUN java -version 2>> /home/${NB_USER}/notebooks/README.md
-RUN asd --version >> /home/${NB_USER}/notebooks/README.md
-RUN echo -e "Aerospike Python Client `pip show aerospike|grep Version|sed -e 's/Version://g'`" >> /home/${NB_USER}/notebooks/README.md
-RUN echo -e "Aerospike Java Client 5.0.0" >> /home/${NB_USER}/notebooks/README.md
+RUN echo "Versions:" > /home/${NB_USER}/notebooks/README.md \
+  && python -V >> /home/${NB_USER}/notebooks/README.md \
+  && java -version 2>> /home/${NB_USER}/notebooks/README.md \
+  && asd --version >> /home/${NB_USER}/notebooks/README.md \
+  && echo -e "Aerospike Python Client `pip show aerospike|grep Version|sed -e 's/Version://g'`" >> /home/${NB_USER}/notebooks/README.md \
+  && echo -e "Aerospike Java Client 5.0.0" >> /home/${NB_USER}/notebooks/README.md
 
 #COPY jupyter_notebook_config.py /home/${NB_USER}/
-RUN  fix-permissions /home/${NB_USER}/
-RUN fix-permissions /etc/aerospike/
-RUN fix-permissions /var/log/aerospike/
-RUN fix-permissions /usr/local/bin/
+RUN  fix-permissions /home/${NB_USER}/ \
+  && fix-permissions /etc/aerospike/ \
+  && fix-permissions /var/log/aerospike/ \
+  && fix-permissions /usr/local/bin/
 
+CMD ["/usr/local/bin/aerospike-run.sh"]
 WORKDIR /home/${NB_USER}/notebooks  
 USER ${NB_USER}
-CMD ["/usr/local/bin/aerospike-run.sh"]

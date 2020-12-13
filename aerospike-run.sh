@@ -33,9 +33,9 @@ if [ -f /etc/aerospike/aerospike.template.conf ]; then
         envsubst < /etc/aerospike/aerospike.template.conf > /etc/aerospike/aerospike.conf
 fi
 
-echo "starting aerospike"
+echo "**starting aerospike"
 #service aerospike restart
-/etc/init.d/aerospike restart 2>&1 >> /var/log/aerospike/start-up.log
+/etc/init.d/aerospike restart 
 echo $?
 
 
