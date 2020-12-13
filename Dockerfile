@@ -21,6 +21,7 @@ USER root
 RUN chown -R ${NB_UID} ${HOME}
 COPY entrypoint.sh /usr/local/bin/start-notebook.sh
 COPY start-singleuser.sh /usr/local/bin/start-singleuser.sh
+COPY aerospike-run.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/start-singleuser.sh
 
 RUN  mkdir /var/run/aerospike\
@@ -79,4 +80,4 @@ RUN fix-permissions /usr/local/bin/
 
 WORKDIR /home/${NB_USER}/notebooks  
 USER ${NB_USER}
-CMD ["/usr/local/bin/start-notebook.sh"]
+CMD ["/usr/local/bin/aerospike-run.sh"]
